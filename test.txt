@@ -1,0 +1,29 @@
+int main()
+{
+	InitRand();
+
+
+
+	wchar_t NtDeviceName[0x100] = { 0 };
+
+
+	int ret = 0;
+	HANDLE hDevice = 0;
+	if (!GetNtDeviceName(GUID_DEVINTERFACE_UMBUS, NtDeviceName))
+	{
+		wprintf(L"NtDeviceName: %s\r\n", NtDeviceName);
+		
+		ret = OpenDevice((wchar_t*)NtDeviceName, &hDevice);
+		printf("OpenDevice, ret: %X\r\n", ret);
+	}
+
+
+
+	if (ret >= 0)
+	{
+		ThreadForEachCtl(hDevice);
+		Sleep(-1);
+	}
+
+	return 0;
+}
